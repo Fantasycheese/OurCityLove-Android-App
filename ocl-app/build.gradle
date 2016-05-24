@@ -26,4 +26,13 @@ dependencies {
     compile 'ch.acra:acra:4.9.0-RC-2'   // crash report
     compile 'com.google.firebase:firebase-core:9.0.0'   // analytics
     compile 'com.karumi:dexter:2.2.2' // runtime permission
+    compile 'io.reactivex:rxandroid:1.0.1' // RxAndroid
+    compile 'io.reactivex:rxjava:1.0.14' // RxJava
+    compile 'com.jakewharton:butterknife:7.0.1' // view injection
+    compile 'com.google.code.gson:gson:2.4' // json
+    compile 'de.greenrobot:eventbus:2.4.0' // event bus
+    compile 'com.squareup.retrofit2:retrofit:2.0.0' // http
+    compile 'com.squareup.retrofit2:converter-gson:2.0.0' // http
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.0.0' // http
+    compile 'com.github.bumptech.glide:glide:3.6.0' // image loader
 }
