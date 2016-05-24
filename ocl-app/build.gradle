@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.github.dcendents.android-maven'
-group='com.github.Fantasycheese'
+
+apply plugin: 'com.github.dcendents.android-maven' // for jitpack
+group='com.github.Fantasycheese' // for jitpack
 
 android {
     compileSdkVersion 23

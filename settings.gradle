@@ -1,1 +1,1 @@
-include ':sample', ':ocl-app'
+include ':ocl-app', ':sample'
