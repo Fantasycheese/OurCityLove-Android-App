@@ -1,7 +1,9 @@
 package org.ourcitylove.oclapp;
 
 import android.app.Application;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.karumi.dexter.Dexter;
@@ -11,13 +13,15 @@ import org.acra.ACRA;
 public class OclApp extends Application {
 
     protected static FirebaseAnalytics mFirebaseAnalytics;
+    protected static SharedPreferences pref;
 
     @Override
     public void onCreate() {
         super.onCreate();
         ACRA.init(this);
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         Dexter.initialize(this);
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        pref = PreferenceManager.getDefaultSharedPreferences(this);
     }
 
     public void trackScreen(String name) {
