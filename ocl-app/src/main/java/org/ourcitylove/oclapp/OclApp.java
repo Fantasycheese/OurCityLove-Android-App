@@ -12,8 +12,8 @@ import org.acra.ACRA;
 
 public class OclApp extends Application {
 
-    protected static FirebaseAnalytics mFirebaseAnalytics;
-    protected static SharedPreferences pref;
+    public static FirebaseAnalytics mFirebaseAnalytics;
+    public SharedPreferences pref;
 
     @Override
     public void onCreate() {
