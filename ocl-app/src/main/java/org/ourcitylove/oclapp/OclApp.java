@@ -13,7 +13,7 @@ import org.acra.ACRA;
 public class OclApp extends Application {
 
     public static FirebaseAnalytics mFirebaseAnalytics;
-    public SharedPreferences pref;
+    public static SharedPreferences pref;
 
     @Override
     public void onCreate() {
