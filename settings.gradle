@@ -1,1 +1,1 @@
-include ':ocl-app', ':sample'
+include ':ocl-app', ':sample', ':smart-location'
