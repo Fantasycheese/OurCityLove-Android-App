@@ -18,6 +18,7 @@ import org.acra.ACRA;
 import io.nlopez.smartlocation.OnLocationUpdatedListener;
 import io.nlopez.smartlocation.SmartLocation;
 import io.nlopez.smartlocation.location.config.LocationParams;
+import io.nlopez.smartlocation.location.providers.LocationGooglePlayServicesProvider;
 
 public class OclApp extends Application {
 
@@ -25,14 +26,16 @@ public class OclApp extends Application {
     public static SharedPreferences pref;
     private static SmartLocation.LocationControl smartLoc;
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        ACRA.init(this);
-        Dexter.initialize(this);
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-        pref = PreferenceManager.getDefaultSharedPreferences(this);
-        smartLoc = SmartLocation.with(this).location().config(BuildConfig.DEBUG ? LocationParams.NAVIGATION : LocationParams.BEST_EFFORT);
+    public void init(Application app) {
+        ACRA.init(app);
+        Dexter.initialize(app);
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(app);
+        pref = PreferenceManager.getDefaultSharedPreferences(app);
+
+        LocationGooglePlayServicesProvider provider = new LocationGooglePlayServicesProvider();
+        provider.setCheckLocationSettings(true);
+        smartLoc = SmartLocation.with(app).location(provider)
+                .config(BuildConfig.DEBUG ? LocationParams.NAVIGATION : LocationParams.BEST_EFFORT);
     }
 
     public void trackScreen(String name) {
@@ -45,11 +48,11 @@ public class OclApp extends Application {
         if (Dexter.isRequestOngoing()) return;
         Dexter.checkPermission(RationalePermissionListener.Builder.with(context)
                 .withRunOnGranted(()->{
-                    if (!smartLoc.state().locationServicesEnabled()) {
-                        openLocationSetting(context); return;
-                    }
+//                    if (!smartLoc.state().locationServicesEnabled()) {
+//                        openLocationSetting(context); return;
+//                    }
                     if (!smartLoc.state().isAnyProviderAvailable()) {
-                        Toast.makeText(context, "無法取得您的位置", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, R.string.cant_locate, Toast.LENGTH_SHORT).show();
                         return;
                     }
                     smartLoc.start(listener);

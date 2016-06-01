@@ -11,4 +11,5 @@
     <string name="permission_sms" translatable="false">簡訊</string>
     <string name="permission_storage" translatable="false">儲存</string>
     <string name="permission_rationale_default_msg" translatable="false">我們需要此權限以便使用此項功能，建議您啟用此權限</string>
+    <string name="cant_locate">無法取得您的位置</string>
 </resources>
