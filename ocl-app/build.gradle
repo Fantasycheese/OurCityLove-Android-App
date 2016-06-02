@@ -33,5 +33,5 @@ dependencies {
     compile 'com.karumi:dexter:2.2.2' // runtime permission
     compile 'com.afollestad.material-dialogs:core:0.8.5.9' // material dialog
 
-    compile project(path: ':smart-location')
+    compile project(':smart-location')
 }

@@ -1,1 +1,2 @@
 include ':ocl-app', ':sample', ':smart-location'
+project(':smart-location').projectDir = new File('/smart-location')
