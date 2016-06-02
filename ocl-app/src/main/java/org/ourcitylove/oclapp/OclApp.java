@@ -20,13 +20,14 @@ import io.nlopez.smartlocation.SmartLocation;
 import io.nlopez.smartlocation.location.config.LocationParams;
 import io.nlopez.smartlocation.location.providers.LocationGooglePlayServicesProvider;
 
+@SuppressWarnings("unused")
 public class OclApp extends Application {
 
     public static FirebaseAnalytics mFirebaseAnalytics;
     public static SharedPreferences pref;
     private static SmartLocation.LocationControl smartLoc;
 
-    public void init(Application app) {
+    public void initOclApp(Application app) {
         ACRA.init(app);
         Dexter.initialize(app);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(app);
