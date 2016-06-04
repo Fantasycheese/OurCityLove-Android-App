@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="message_toast_crash">出現未知錯誤，已將錯誤資訊回報以利錯誤修復</string>
-    <string name="cant_locate">無法取得您的位置</string>
 </resources>
