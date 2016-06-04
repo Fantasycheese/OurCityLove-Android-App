@@ -1,14 +1,12 @@
 package org.ourcitylove.oclapp;
 
 import android.Manifest;
-import android.app.AlertDialog;
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.widget.Toast;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.karumi.dexter.Dexter;
@@ -25,19 +23,33 @@ public class OclApp extends Application {
 
     public static FirebaseAnalytics mFirebaseAnalytics;
     public static SharedPreferences pref;
-    private static SmartLocation.LocationControl smartLoc;
+    private SmartLocation.LocationControl smartLoc;
+    private LocationGooglePlayServicesProvider locProvider;
 
-    public void initOclApp(Application app) {
-        ACRA.init(app);
-        Dexter.initialize(app);
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(app);
-        pref = PreferenceManager.getDefaultSharedPreferences(app);
-
-        LocationGooglePlayServicesProvider provider = new LocationGooglePlayServicesProvider();
-        provider.setCheckLocationSettings(true);
-        smartLoc = SmartLocation.with(app).location(provider)
-                .config(BuildConfig.DEBUG ? LocationParams.NAVIGATION : LocationParams.BEST_EFFORT);
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        ACRA.init(this);
+        Dexter.initialize(this);
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        pref = PreferenceManager.getDefaultSharedPreferences(this);
     }
+
+    public void initSmartLoc(Activity activity, LocationParams params) {
+        locProvider = new LocationGooglePlayServicesProvider();
+        locProvider.setCheckLocationSettings(true);
+        smartLoc = SmartLocation.with(activity).location(locProvider)
+                .config(params);
+    }
+
+    public void startLoc(Context context, OnLocationUpdatedListener listener) {
+        if (Dexter.isRequestOngoing()) return;
+        Dexter.checkPermission(RationalePermissionListener.Builder.with(context)
+                .withRunOnGranted(()-> smartLoc.start(listener)).build(),
+                Manifest.permission.ACCESS_FINE_LOCATION);
+    }
+
+    public void stopLoc() { smartLoc.stop(); }
 
     public void trackScreen(String name) {
         Bundle bundle = new Bundle();
@@ -45,33 +57,7 @@ public class OclApp extends Application {
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
     }
 
-    public static void startLoc(Context context, OnLocationUpdatedListener listener) {
-        if (Dexter.isRequestOngoing()) return;
-        Dexter.checkPermission(RationalePermissionListener.Builder.with(context)
-                .withRunOnGranted(()->{
-//                    if (!smartLoc.state().locationServicesEnabled()) {
-//                        openLocationSetting(context); return;
-//                    }
-                    if (!smartLoc.state().isAnyProviderAvailable()) {
-                        Toast.makeText(context, R.string.cant_locate, Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    smartLoc.start(listener);
-                }).build(), Manifest.permission.ACCESS_FINE_LOCATION);
-    }
-
-    public static void stopLoc() { smartLoc.stop(); }
-
-    public static void openLocationSetting(Context context) {
-        boolean bTW = true;
-        new AlertDialog.Builder(context)
-                .setTitle(bTW?"設定位置服務":"Location access setting")
-                .setMessage(bTW?"請開啟Network or GPS位置服務(隨後跳轉)":"Please turn on the access to my location.")
-                .setNegativeButton(android.R.string.cancel, null)
-                .setPositiveButton(android.R.string.ok,
-                        (dialog, which) ->
-                                context.startActivity(new Intent(
-                                        android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)))
-                .show();
+    public LocationGooglePlayServicesProvider getLocProvider() {
+        return locProvider;
     }
 }
