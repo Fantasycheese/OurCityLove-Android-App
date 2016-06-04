@@ -32,6 +32,5 @@ dependencies {
     compile 'com.google.firebase:firebase-core:9.0.0'   // analytics
     compile 'com.karumi:dexter:2.2.2' // runtime permission
     compile 'com.afollestad.material-dialogs:core:0.8.5.9' // material dialog
-
-    compile project(':smart-location')
+    compile project(path: ':smart-location')
 }
