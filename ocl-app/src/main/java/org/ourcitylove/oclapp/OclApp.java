@@ -42,11 +42,16 @@ public class OclApp extends Application {
                 .config(params);
     }
 
-    public void startLoc(Context context, OnLocationUpdatedListener listener) {
+    public void startLoc(Context context, String rationaleMsg, OnLocationUpdatedListener listener) {
         if (Dexter.isRequestOngoing()) return;
         Dexter.checkPermission(RationalePermissionListener.Builder.with(context)
-                .withRunOnGranted(()-> smartLoc.start(listener)).build(),
+                .withRunOnGranted(()-> smartLoc.start(listener))
+                .withRationaleMsg(rationaleMsg).build(),
                 Manifest.permission.ACCESS_FINE_LOCATION);
+    }
+
+    public void startLoc(Context context, OnLocationUpdatedListener listener) {
+        startLoc(context, null, listener);
     }
 
     public void stopLoc() { smartLoc.stop(); }
