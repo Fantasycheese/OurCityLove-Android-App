@@ -14,6 +14,8 @@
     <string name="permission_sms" translatable="false">簡訊</string>
     <string name="permission_storage" translatable="false">儲存</string>
 
-    <string name="permission_action_default">使用此項功能</string>
+    <string name="permission_action_default" translatable="false">使用此項功能</string>
     <string name="permission_action_location" translatable="false">為您進行定位</string>
+
+    <string name="setting" translatable="false">設定</string>
 </resources>

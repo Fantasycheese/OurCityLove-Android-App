@@ -2,12 +2,17 @@ package org.ourcitylove.oclapp;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 
+import com.github.pwittchen.reactivenetwork.library.ConnectivityStatus;
+import com.github.pwittchen.reactivenetwork.library.ReactiveNetwork;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.karumi.dexter.Dexter;
 
@@ -64,5 +69,17 @@ public class OclApp extends Application {
 
     public LocationGooglePlayServicesProvider getLocProvider() {
         return locProvider;
+    }
+
+    public void checkConnectivity(Activity activity, String msg) {
+        ConnectivityStatus status = new ReactiveNetwork().getConnectivityStatus(activity, true);
+        if (status == ConnectivityStatus.OFFLINE) {
+            new AlertDialog.Builder(activity)
+                    .setMessage(msg)
+                    .setPositiveButton(R.string.setting, (dialog, which) ->
+                            activity.startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS)))
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .create().show();
+        }
     }
 }
