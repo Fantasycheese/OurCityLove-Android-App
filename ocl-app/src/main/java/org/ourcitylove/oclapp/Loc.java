@@ -9,6 +9,7 @@ import com.karumi.dexter.Dexter;
 import io.nlopez.smartlocation.SmartLocation;
 import io.nlopez.smartlocation.location.config.LocationAccuracy;
 import io.nlopez.smartlocation.location.config.LocationParams;
+import io.nlopez.smartlocation.location.providers.LocationGooglePlayServicesProvider;
 import io.nlopez.smartlocation.rx.ObservableFactory;
 import rx.Observable;
 import rx.Subscription;
@@ -31,8 +32,10 @@ public class Loc {
                     .withRationaleMsg(permissionMsg)
                     .withRunOnGranted(() -> {
                         stop();
-                        SmartLocation.LocationControl lc = SmartLocation.with(activity).
-                                location().config(locParams);
+                        LocationGooglePlayServicesProvider lp = new LocationGooglePlayServicesProvider();
+                        lp.setCheckLocationSettings(true);
+                        SmartLocation.LocationControl lc = SmartLocation.with(activity)
+                                .location(lp).config(locParams);
                         locSubscription = ObservableFactory.from(lc).subscribe(
                                 subscriber::onNext,
                                 subscriber::onError,
