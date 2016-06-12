@@ -1,6 +1,5 @@
 package org.ourcitylove.sample;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -10,8 +9,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-
-import org.ourcitylove.oclapp.LocationParams;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,14 +37,7 @@ public class MainActivity extends AppCompatActivity {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show());
 
-        ((App) getApplication()).initSmartLoc(this, LocationParams.NAVIGATION);
-        ((App) getApplication()).startLoc(this,location -> Log.d(TAG, "onCreate: "+location.toString()));
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        ((App) getApplication()).getLocProvider().onActivityResult(requestCode, resultCode, data);
+        App.loc.start(this,location -> Log.d(TAG, "onCreate: "+location.toString()));
     }
 
     @Override
