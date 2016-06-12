@@ -2,39 +2,49 @@ package org.ourcitylove.oclapp;
 
 import android.Manifest;
 import android.app.Activity;
+import android.location.Location;
 
 import com.karumi.dexter.Dexter;
 
-import io.nlopez.smartlocation.OnLocationUpdatedListener;
 import io.nlopez.smartlocation.SmartLocation;
 import io.nlopez.smartlocation.location.config.LocationAccuracy;
 import io.nlopez.smartlocation.location.config.LocationParams;
+import io.nlopez.smartlocation.rx.ObservableFactory;
+import rx.Observable;
+import rx.Subscription;
 
 public class Loc {
 
     private final LocationParams locParams;
     private final String permissionMsg;
-    private SmartLocation.LocationControl loc;
+    private Subscription locSubscription;
 
     public Loc(LocationParams locParams, String permissionMsg) {
         this.locParams = locParams;
         this.permissionMsg = permissionMsg;
     }
     
-    public void start(Activity activity, OnLocationUpdatedListener listener) {
-        if (Dexter.isRequestOngoing()) return;
-        Dexter.checkPermission(RationalePermissionListener.Builder.with(activity)
-                        .withRunOnGranted(() -> {
-                            stop();
-                            loc = SmartLocation.with(activity).location().config(locParams);
-                            loc.start(listener);
-                        })
-                        .withRationaleMsg(permissionMsg).build(),
-                Manifest.permission.ACCESS_FINE_LOCATION);
+    public Observable<Location> start(Activity activity) {
+        return Observable.create(subscriber -> {
+            if (Dexter.isRequestOngoing()) return;
+            Dexter.checkPermission(RationalePermissionListener.Builder.with(activity)
+                    .withRationaleMsg(permissionMsg)
+                    .withRunOnGranted(() -> {
+                        stop();
+                        SmartLocation.LocationControl lc = SmartLocation.with(activity).
+                                location().config(locParams);
+                        locSubscription = ObservableFactory.from(lc).subscribe(
+                                subscriber::onNext,
+                                subscriber::onError,
+                                subscriber::onCompleted
+                        );
+                    }).build(), Manifest.permission.ACCESS_FINE_LOCATION);
+        });
     }
 
     public void stop() {
-        if (loc != null) loc.stop();
+        if (locSubscription != null && !locSubscription.isUnsubscribed())
+            locSubscription.unsubscribe();
     }
 
     public static class Builder {
