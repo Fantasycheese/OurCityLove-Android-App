@@ -1,5 +1,6 @@
 package org.ourcitylove.sample;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -12,6 +13,7 @@ import android.view.MenuItem;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.Observable;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,16 +38,35 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(view ->
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show());
+    }
 
-        App.loc.last(this)
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        Observable.just(App.loc.last(this))
                 .concatWith(App.loc.update(this))
-                .subscribe(location -> Log.d(TAG, "onCreate: "+location.toString()));
+                .filter(location -> location != null)
+                .subscribe(location -> {
+                    Log.d(TAG, "onCreate: " + location.toString());
+                });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        App.loc.lp.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        App.loc.stop();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        App.loc.stop();
     }
 
     @Override

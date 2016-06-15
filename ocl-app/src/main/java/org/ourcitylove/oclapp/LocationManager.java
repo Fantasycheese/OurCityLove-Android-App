@@ -11,7 +11,6 @@ import io.nlopez.smartlocation.SmartLocation;
 import io.nlopez.smartlocation.location.config.LocationAccuracy;
 import io.nlopez.smartlocation.location.config.LocationParams;
 import io.nlopez.smartlocation.location.providers.LocationGooglePlayServicesProvider;
-import io.nlopez.smartlocation.rx.ObservableFactory;
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
@@ -22,15 +21,19 @@ public class LocationManager {
 
     private final LocationParams locParams;
     private final String permissionMsg;
+    public final LocationGooglePlayServicesProvider lp;
     private Subscription locSubscription;
+    private SmartLocation.LocationControl lc;
 
     public LocationManager(LocationParams locParams, String permissionMsg) {
         this.locParams = locParams;
         this.permissionMsg = permissionMsg;
+        this.lp = new LocationGooglePlayServicesProvider();
+        this.lp.setCheckLocationSettings(true);
     }
 
-    public Observable<Location> last(Context context) {
-        return Observable.just(SmartLocation.with(context).location().getLastLocation());
+    public Location last(Context context) {
+        return SmartLocation.with(context).location(lp).getLastLocation();
     }
     
     public Observable<Location> update(Activity activity) {
@@ -48,16 +51,13 @@ public class LocationManager {
 
     private void startUpdateLocation(Subscriber<? super Location> subscriber, Activity activity) {
         LocationManager.this.stop();
-        LocationGooglePlayServicesProvider lp = new LocationGooglePlayServicesProvider();
-        lp.setCheckLocationSettings(true);
-        SmartLocation.LocationControl lc = SmartLocation.with(activity)
-                .location(lp).config(locParams);
-        locSubscription = ObservableFactory.from(lc).subscribe(subscriber::onNext);
+        lc = SmartLocation.with(activity)
+                .location().config(locParams);
+        lc.start(subscriber::onNext);
     }
 
     public void stop() {
-        if (locSubscription != null && !locSubscription.isUnsubscribed())
-            locSubscription.unsubscribe();
+        if (lc != null) lc.stop();
     }
 
     public static class Builder {
