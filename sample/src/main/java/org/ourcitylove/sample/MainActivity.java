@@ -37,7 +37,9 @@ public class MainActivity extends AppCompatActivity {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show());
 
-        App.loc.start(this).subscribe(location -> Log.d(TAG, "onCreate: "+location.toString()));
+        App.loc.last(this)
+                .concatWith(App.loc.update(this))
+                .subscribe(location -> Log.d(TAG, "onCreate: "+location.toString()));
     }
 
     @Override

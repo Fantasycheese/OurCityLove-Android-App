@@ -3,6 +3,7 @@ package org.ourcitylove.oclapp;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.location.Location;
 
 import com.karumi.dexter.Dexter;
 
@@ -12,6 +13,7 @@ import io.nlopez.smartlocation.location.config.LocationParams;
 import io.nlopez.smartlocation.location.providers.LocationGooglePlayServicesProvider;
 import io.nlopez.smartlocation.rx.ObservableFactory;
 import rx.Observable;
+import rx.Subscriber;
 import rx.Subscription;
 
 public class LocationManager {
@@ -26,25 +28,31 @@ public class LocationManager {
         this.locParams = locParams;
         this.permissionMsg = permissionMsg;
     }
+
+    public Observable<Location> last(Context context) {
+        return Observable.just(SmartLocation.with(context).location().getLastLocation());
+    }
     
-    public Observable<android.location.Location> start(Activity activity) {
+    public Observable<Location> update(Activity activity) {
         return Observable.create(subscriber -> {
             if (Dexter.isRequestOngoing()) return;
-            Dexter.checkPermission(RationalePermissionListener.Builder.with(activity)
-                    .withRationaleMsg(permissionMsg)
-                    .withRunOnGranted(() -> {
-                        stop();
-                        LocationGooglePlayServicesProvider lp = new LocationGooglePlayServicesProvider();
-                        lp.setCheckLocationSettings(true);
-                        SmartLocation.LocationControl lc = SmartLocation.with(activity)
-                                .location(lp).config(locParams);
-                        locSubscription = ObservableFactory.from(lc).subscribe(
-                                subscriber::onNext,
-                                subscriber::onError,
-                                subscriber::onCompleted
-                        );
-                    }).build(), Manifest.permission.ACCESS_FINE_LOCATION);
+            Dexter.checkPermission(
+                    RationalePermissionListener.Builder.with(activity)
+                            .withRationaleMsg(permissionMsg)
+                            .withRunOnGranted(() -> startUpdateLocation(subscriber, activity))
+                            .build(),
+                    Manifest.permission.ACCESS_FINE_LOCATION
+            );
         });
+    }
+
+    private void startUpdateLocation(Subscriber<? super Location> subscriber, Activity activity) {
+        LocationManager.this.stop();
+        LocationGooglePlayServicesProvider lp = new LocationGooglePlayServicesProvider();
+        lp.setCheckLocationSettings(true);
+        SmartLocation.LocationControl lc = SmartLocation.with(activity)
+                .location(lp).config(locParams);
+        locSubscription = ObservableFactory.from(lc).subscribe(subscriber::onNext);
     }
 
     public void stop() {
