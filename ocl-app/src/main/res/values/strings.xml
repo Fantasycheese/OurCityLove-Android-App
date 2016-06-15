@@ -18,4 +18,5 @@
     <string name="permission_action_location" translatable="false">為您進行定位</string>
 
     <string name="setting" translatable="false">設定</string>
+    <string name="network_error_msg_default" translatable="false">連線失敗，請檢查網路</string>
 </resources>
