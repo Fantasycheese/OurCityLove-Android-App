@@ -19,4 +19,7 @@
 
     <string name="setting" translatable="false">設定</string>
     <string name="network_error_msg_default" translatable="false">連線失敗，請檢查網路</string>
+
+    <string name="unit_kilometer" translatable="false">公里</string>
+    <string name="unit_meter" translatable="false">公尺</string>
 </resources>

@@ -15,7 +15,7 @@ public class OclApp extends Application {
 
     public static FirebaseAnalytics mFirebaseAnalytics;
     public static SharedPreferences pref;
-    public static Loc loc;
+    public static Location loc;
 
     @Override
     public void onCreate() {
@@ -24,6 +24,6 @@ public class OclApp extends Application {
         Dexter.initialize(this);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         pref = PreferenceManager.getDefaultSharedPreferences(this);
-        loc = new Loc.Builder().build();
+        loc = new Location.Builder().build();
     }
 }
