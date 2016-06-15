@@ -14,7 +14,7 @@ import io.nlopez.smartlocation.rx.ObservableFactory;
 import rx.Observable;
 import rx.Subscription;
 
-public class Location {
+public class LocationManager {
     private static final double EARTH_RADIUS = 3958.75;
     private static final int METER_CONVERSION = 1609;
 
@@ -22,7 +22,7 @@ public class Location {
     private final String permissionMsg;
     private Subscription locSubscription;
 
-    public Location(LocationParams locParams, String permissionMsg) {
+    public LocationManager(LocationParams locParams, String permissionMsg) {
         this.locParams = locParams;
         this.permissionMsg = permissionMsg;
     }
@@ -74,8 +74,8 @@ public class Location {
             return this;
         }
 
-        public Location build() {
-            return new Location(locParams, permissionMsg);
+        public LocationManager build() {
+            return new LocationManager(locParams, permissionMsg);
         }
     }
 
