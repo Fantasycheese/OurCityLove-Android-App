@@ -30,6 +30,12 @@ public class LocationManager {
         this.lp.setCheckLocationSettings(true);
     }
 
+    public Observable<Location> lastAndUpdate(Activity activity) {
+        return Observable.just(OclApp.loc.last(activity))
+                .concatWith(OclApp.loc.update(activity))
+                .filter(location -> location != null);
+    }
+
     public Location last(Context context) {
         return SmartLocation.with(context).location(lp).getLastLocation();
     }
