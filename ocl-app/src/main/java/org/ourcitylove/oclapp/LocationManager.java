@@ -13,7 +13,6 @@ import io.nlopez.smartlocation.location.config.LocationParams;
 import io.nlopez.smartlocation.location.providers.LocationGooglePlayServicesProvider;
 import rx.Observable;
 import rx.Subscriber;
-import rx.Subscription;
 
 public class LocationManager {
     private static final double EARTH_RADIUS = 3958.75;
@@ -22,7 +21,6 @@ public class LocationManager {
     private final LocationParams locParams;
     private final String permissionMsg;
     public final LocationGooglePlayServicesProvider lp;
-    private Subscription locSubscription;
     private SmartLocation.LocationControl lc;
 
     public LocationManager(LocationParams locParams, String permissionMsg) {

@@ -1,21 +1,21 @@
 package org.ourcitylove.sample;
 
-import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import org.ourcitylove.oclapp.BaseActivity;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rx.Observable;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        setNeedLocation(true);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(view ->
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
@@ -41,27 +42,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-
-        Observable.just(App.loc.last(this))
-                .concatWith(App.loc.update(this))
-                .filter(location -> location != null)
-                .subscribe(location -> {
-                    Log.d(TAG, "onCreate: " + location.toString());
-                });
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        App.loc.lp.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        App.loc.stop();
+    protected void onLocation(Location location) {
+        Log.d(TAG, "onLocation: "+location.toString());
     }
 
     @Override
