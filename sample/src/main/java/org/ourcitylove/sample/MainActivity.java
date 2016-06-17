@@ -11,6 +11,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import org.ourcitylove.oclapp.BaseActivity;
+import org.ourcitylove.oclapp.Firebase;
+import org.ourcitylove.oclapp.Network;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,6 +41,12 @@ public class MainActivity extends BaseActivity {
         fab.setOnClickListener(view ->
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show());
+
+        Firebase.trackScreen("MAIN");
+
+        Network.checkConnectivity(this, "Please connect to network");
+
+        App.loc.lastAndUpdate(this).subscribe(location -> Log.d(TAG, "onCreate: "+location.toString()));
     }
 
     @Override
