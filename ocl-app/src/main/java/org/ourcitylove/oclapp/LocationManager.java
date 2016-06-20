@@ -32,6 +32,10 @@ public class LocationManager {
         this.lp.setCheckLocationSettings(true);
     }
 
+    public Observable<Location> lastAndUpdate(Activity activity) {
+        return lastAndUpdate(activity, false);
+    }
+
     public Observable<Location> lastAndUpdate(Activity activity, boolean oneFix) {
         return Observable.just(OclApp.loc.last(activity))
                 .concatWith(OclApp.loc.update(activity, oneFix))
@@ -42,6 +46,10 @@ public class LocationManager {
         return SmartLocation.with(context).location(lp).getLastLocation();
     }
     
+    public Observable<Location> update(Activity activity) {
+        return update(activity, false);
+    }
+
     public Observable<Location> update(Activity activity, boolean oneFix) {
         return Observable.create(subscriber -> {
             if (Dexter.isRequestOngoing()) return;
