@@ -14,14 +14,16 @@ import io.nlopez.smartlocation.location.providers.LocationGooglePlayServicesProv
 import rx.Observable;
 import rx.Subscriber;
 
+@SuppressWarnings("unused")
 public class LocationManager {
     private static final double EARTH_RADIUS = 3958.75;
     private static final int METER_CONVERSION = 1609;
 
-    private final LocationParams locParams;
-    private final String permissionMsg;
-    public final LocationGooglePlayServicesProvider lp;
     private SmartLocation.LocationControl lc;
+
+    public LocationParams locParams;
+    public String permissionMsg;
+    public LocationGooglePlayServicesProvider lp;
 
     public LocationManager(LocationParams locParams, String permissionMsg) {
         this.locParams = locParams;
@@ -30,9 +32,9 @@ public class LocationManager {
         this.lp.setCheckLocationSettings(true);
     }
 
-    public Observable<Location> lastAndUpdate(Activity activity) {
+    public Observable<Location> lastAndUpdate(Activity activity, boolean oneFix) {
         return Observable.just(OclApp.loc.last(activity))
-                .concatWith(OclApp.loc.update(activity))
+                .concatWith(OclApp.loc.update(activity, oneFix))
                 .filter(location -> location != null);
     }
 
@@ -40,23 +42,24 @@ public class LocationManager {
         return SmartLocation.with(context).location(lp).getLastLocation();
     }
     
-    public Observable<Location> update(Activity activity) {
+    public Observable<Location> update(Activity activity, boolean oneFix) {
         return Observable.create(subscriber -> {
             if (Dexter.isRequestOngoing()) return;
             Dexter.checkPermission(
                     RationalePermissionListener.Builder.with(activity)
                             .withRationaleMsg(permissionMsg)
-                            .withRunOnGranted(() -> startUpdateLocation(subscriber, activity))
+                            .withRunOnGranted(() -> startUpdateLocation(subscriber, activity, oneFix))
                             .build(),
                     Manifest.permission.ACCESS_FINE_LOCATION
             );
         });
     }
 
-    private void startUpdateLocation(Subscriber<? super Location> subscriber, Activity activity) {
+    private void startUpdateLocation(Subscriber<? super Location> subscriber, Activity activity, boolean oneFix) {
         LocationManager.this.stop();
         lc = SmartLocation.with(activity)
                 .location().config(locParams);
+        if (oneFix) lc = lc.oneFix();
         lc.start(subscriber::onNext);
     }
 
