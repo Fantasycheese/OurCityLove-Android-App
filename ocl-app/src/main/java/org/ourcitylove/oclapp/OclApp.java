@@ -24,6 +24,6 @@ public class OclApp extends Application {
         Dexter.initialize(this);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         pref = PreferenceManager.getDefaultSharedPreferences(this);
-        loc = new LocationManager.Builder().build();
+        loc = new LocationManager.Builder().setLog(true).build();
     }
 }

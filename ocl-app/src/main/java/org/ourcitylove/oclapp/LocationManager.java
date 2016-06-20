@@ -23,11 +23,13 @@ public class LocationManager {
 
     public LocationParams locParams;
     public String permissionMsg;
+    public boolean log;
     public LocationGooglePlayServicesProvider lp;
 
-    public LocationManager(LocationParams locParams, String permissionMsg) {
+    public LocationManager(LocationParams locParams, String permissionMsg, boolean log) {
         this.locParams = locParams;
         this.permissionMsg = permissionMsg;
+        this.log = log;
         this.lp = new LocationGooglePlayServicesProvider();
         this.lp.setCheckLocationSettings(true);
     }
@@ -43,7 +45,8 @@ public class LocationManager {
     }
 
     public Location last(Context context) {
-        return SmartLocation.with(context).location(lp).getLastLocation();
+        SmartLocation smartLocation = new SmartLocation.Builder(context).logging(log).build();
+        return smartLocation.location(lp).getLastLocation();
     }
     
     public Observable<Location> update(Activity activity) {
@@ -65,8 +68,8 @@ public class LocationManager {
 
     private void startUpdateLocation(Subscriber<? super Location> subscriber, Activity activity, boolean oneFix) {
         LocationManager.this.stop();
-        lc = SmartLocation.with(activity)
-                .location().config(locParams);
+        SmartLocation smartLocation = new SmartLocation.Builder(activity).logging(log).build();
+        lc = smartLocation.location().config(locParams);
         if (oneFix) lc = lc.oneFix();
         lc.start(subscriber::onNext);
     }
@@ -79,6 +82,7 @@ public class LocationManager {
 
         private LocationParams locParams;
         private String permissionMsg;
+        private boolean log;
 
         public Builder() {
             this.locParams = new LocationParams.Builder()
@@ -97,8 +101,13 @@ public class LocationManager {
             return this;
         }
 
+        public Builder setLog(boolean log) {
+            this.log = log;
+            return this;
+        }
+
         public LocationManager build() {
-            return new LocationManager(locParams, permissionMsg);
+            return new LocationManager(locParams, permissionMsg, log);
         }
     }
 
