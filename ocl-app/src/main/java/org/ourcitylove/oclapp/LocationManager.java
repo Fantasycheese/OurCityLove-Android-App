@@ -45,8 +45,9 @@ public class LocationManager {
     }
 
     public Location last(Context context) {
-        SmartLocation smartLocation = new SmartLocation.Builder(context).logging(log).build();
-        return smartLocation.location(lp).getLastLocation();
+        return new SmartLocation.Builder(context)
+                .logging(log).build().location(lp)
+                .getLastLocation();
     }
     
     public Observable<Location> update(Activity activity) {
@@ -67,9 +68,8 @@ public class LocationManager {
     }
 
     private void startUpdateLocation(Subscriber<? super Location> subscriber, Activity activity, boolean oneFix) {
-        LocationManager.this.stop();
-        SmartLocation smartLocation = new SmartLocation.Builder(activity).logging(log).build();
-        lc = smartLocation.location().config(locParams);
+        lc = new SmartLocation.Builder(activity)
+                .logging(log).build().location().config(locParams);
         if (oneFix) lc = lc.oneFix();
         lc.start(subscriber::onNext);
     }
