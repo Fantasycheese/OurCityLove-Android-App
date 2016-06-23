@@ -9,10 +9,6 @@ import rx.Observable;
 public class BaseActivity extends AppCompatActivity {
     private boolean needLocation;
 
-    public boolean needLocation() {
-        return needLocation;
-    }
-
     // set this before on start
     public void setNeedLocation(boolean needLocation) {
         this.needLocation = needLocation;

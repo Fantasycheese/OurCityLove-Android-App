@@ -69,7 +69,7 @@ public class LocationManager {
 
     private void startUpdateLocation(Subscriber<? super Location> subscriber, Activity activity, boolean oneFix) {
         lc = new SmartLocation.Builder(activity)
-                .logging(log).build().location().config(locParams);
+                .logging(log).build().location(lp).config(locParams);
         if (oneFix) lc = lc.oneFix();
         lc.start(subscriber::onNext);
     }
