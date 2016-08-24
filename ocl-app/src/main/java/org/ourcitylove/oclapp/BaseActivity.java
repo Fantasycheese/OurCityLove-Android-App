@@ -3,10 +3,10 @@ package org.ourcitylove.oclapp;
 import android.content.Intent;
 import android.location.Location;
 import android.support.v7.app.AppCompatActivity;
-
-import rx.Observable;
+import android.util.Log;
 
 public class BaseActivity extends AppCompatActivity {
+    private static final String TAG = BaseActivity.class.getCanonicalName();
     private boolean needLocation;
 
     // set this before on start
@@ -18,14 +18,20 @@ public class BaseActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        if (needLocation)
-            Observable.just(OclApp.loc.last(this))
-                    .concatWith(OclApp.loc.update(this))
+        if (needLocation) {
+            OclApp.loc.lastAndUpdate(this)
                     .filter(location -> location != null)
                     .subscribe(this::onLocation);
+        }
+//            Observable.just(OclApp.loc.last(this))
+//                    .concatWith(OclApp.loc.update(this))
+//                    .filter(location -> location != null)
+//                    .subscribe(this::onLocation);
     }
 
-    protected void onLocation(Location location) {}
+    protected void onLocation(Location location) {
+        Log.d(TAG, "onLocation: "+location.toString());
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
