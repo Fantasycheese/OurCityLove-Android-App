@@ -3,6 +3,7 @@ package org.ourcitylove.oclapp;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.telephony.PhoneNumberUtils;
 
 public class OtherApp {
     public static void googleMapNavigate(Context context, String direct){
@@ -18,6 +19,15 @@ public class OtherApp {
         intent.setAction(Intent.ACTION_DIAL);
         intent.setData(Uri.parse("tel:" + tel));
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+    }
+
+    public static void callByWait(Context context, String tel) {
+        tel = tel.replaceAll("()-]", "").replaceAll("#", String.format("%s", PhoneNumberUtils.WAIT));
+        Intent intent = new Intent();
+        intent.setAction("android.intent.action.CALL");
+        intent.setData(Uri.parse("tel:" + tel));
+        intent.setFlags(268435456);
         context.startActivity(intent);
     }
 }
