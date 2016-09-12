@@ -1,7 +1,6 @@
 package org.ourcitylove.oclapp;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
 
@@ -34,13 +33,13 @@ public class LocationManager {
         this.lp.setCheckLocationSettings(true);
     }
 
-    public Observable<Location> lastAndUpdate(Activity activity) {
-        return lastAndUpdate(activity, false);
+    public Observable<Location> lastAndUpdate(Context context) {
+        return lastAndUpdate(context, false);
     }
 
-    public Observable<Location> lastAndUpdate(Activity activity, boolean oneFix) {
-        return Observable.just(OclApp.loc.last(activity))
-                .concatWith(OclApp.loc.update(activity, oneFix))
+    public Observable<Location> lastAndUpdate(Context context, boolean oneFix) {
+        return Observable.just(OclApp.loc.last(context))
+                .concatWith(OclApp.loc.update(context, oneFix))
                 .filter(location -> location != null);
     }
 
@@ -50,25 +49,25 @@ public class LocationManager {
                 .getLastLocation();
     }
     
-    public Observable<Location> update(Activity activity) {
-        return update(activity, false);
+    public Observable<Location> update(Context context) {
+        return update(context, false);
     }
 
-    public Observable<Location> update(Activity activity, boolean oneFix) {
+    public Observable<Location> update(Context context, boolean oneFix) {
         return Observable.create(subscriber -> {
             if (Dexter.isRequestOngoing()) return;
             Dexter.checkPermission(
-                    RationalePermissionListener.Builder.with(activity)
+                    RationalePermissionListener.Builder.with(context)
                             .withRationaleMsg(permissionMsg)
-                            .withRunOnGranted(() -> startUpdateLocation(subscriber, activity, oneFix))
+                            .withRunOnGranted(() -> startUpdateLocation(subscriber, context, oneFix))
                             .build(),
                     Manifest.permission.ACCESS_FINE_LOCATION
             );
         });
     }
 
-    private void startUpdateLocation(Subscriber<? super Location> subscriber, Activity activity, boolean oneFix) {
-        lc = new SmartLocation.Builder(activity)
+    private void startUpdateLocation(Subscriber<? super Location> subscriber, Context context, boolean oneFix) {
+        lc = new SmartLocation.Builder(context)
                 .logging(log).build().location(lp).config(locParams);
         if (oneFix) lc = lc.oneFix();
         lc.start(subscriber::onNext);

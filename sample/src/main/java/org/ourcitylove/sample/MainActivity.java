@@ -44,7 +44,7 @@ public class MainActivity extends BaseActivity {
 
         Firebase.trackScreen("MAIN");
 
-        Network.checkConnectivity(this, "Please connect to network");
+        Network.checkConnectivity(this, "Please connect to network!");
 
         setNeedLocation(true);
     }
