@@ -31,9 +31,9 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:24.2.0'
     compile 'ch.acra:acra:4.9.0'   // crash report
-    compile 'com.google.firebase:firebase-core:9.2.1'   // analytics
+    compile 'com.google.firebase:firebase-core:9.4.0'   // analytics
     compile 'com.karumi:dexter:2.2.2' // runtime permission
     compile 'com.afollestad.material-dialogs:core:0.9.0.1' // material dialog
-    compile 'io.nlopez.smartlocation:library:3.2.5'
+    compile 'io.nlopez.smartlocation:library:3.2.7'
     compile 'com.github.pwittchen:reactivenetwork:0.5.1' // connectivity status
 }
