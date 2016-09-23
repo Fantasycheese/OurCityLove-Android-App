@@ -21,6 +21,10 @@ public class VersionManager {
                 .showAppUpdated(false)
                 .setButtonDoNotShowAgain("");
         vm.act = ac;
+        vm.setTitle(R.string.TitleOnUpdateAvailable);
+        vm.setContent(R.string.ContentOnUpdateAvailable);
+        vm.setUpdateButton(R.string.UpdateGo);
+        vm.setDismissButton(R.string.UpdateNextTime);
         return vm;
     }
 
