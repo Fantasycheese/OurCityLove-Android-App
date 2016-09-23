@@ -22,4 +22,9 @@
 
     <string name="unit_kilometer" translatable="false">公里</string>
     <string name="unit_meter" translatable="false">公尺</string>
+    
+    <string name="TitleOnUpdateAvailable">線上已有更新</string>
+    <string name="ContentOnUpdateAvailable">前往更新%s？</string>
+    <string name="UpdateGo">前往</string>
+    <string name="UpdateNextTime">下次再說</string>
 </resources>

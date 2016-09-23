@@ -20,6 +20,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             file('./proguards').listFiles().each {proguardFile(it)}
         }
+        debug {
+            debuggable true
+        }
     }
     compileOptions {
         targetCompatibility 1.8
@@ -36,4 +39,7 @@ dependencies {
     compile 'com.afollestad.material-dialogs:core:0.9.0.1' // material dialog
     compile 'io.nlopez.smartlocation:library:3.2.7'
     compile 'com.github.pwittchen:reactivenetwork:0.5.1' // connectivity status
+
+    compile 'com.github.javiersantos:AppUpdater:2.4'
+    compile 'com.squareup.okhttp3:okhttp:3.4.1'
 }
