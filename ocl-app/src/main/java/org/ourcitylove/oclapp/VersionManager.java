@@ -10,31 +10,34 @@ import com.github.javiersantos.appupdater.AppUpdater;
  */
 
 public class VersionManager {
+    private static VersionManager vm;
     private static AppUpdater apu;
     public static Activity act;
     private static String Title, Content, Update, Dismiss;
 
-    public static void init(Activity ac){
-        apu = new AppUpdater(ac)
+    public static VersionManager init(Activity ac){
+        vm = null == vm?new VersionManager():vm;
+        vm.apu = new AppUpdater(ac)
                 .showAppUpdated(false)
                 .setButtonDoNotShowAgain("");
-        act = ac;
+        vm.act = ac;
+        return vm;
     }
 
-    public static void setTitle(@StringRes int Res){Title = act.getString(Res);}
-    public static void setTitle(String Res){Title = Res;}
+    public static VersionManager setTitle(@StringRes int Res){vm.Title = vm.act.getString(Res);return vm;}
+    public static VersionManager setTitle(String Res){vm.Title = Res;return vm;}
 
-    public static void setContent(@StringRes int Res){Content = act.getString(Res);}
-    public static void setContent(String Res){Content = Res;}
+    public static VersionManager setContent(@StringRes int Res){vm.Content = vm.act.getString(Res);return vm;}
+    public static VersionManager setContent(String Res){vm.Content = Res;return vm;}
 
-    public static void setUpdateButton(@StringRes int Res){Update = act.getString(Res);}
-    public static void setUpdateButton(String Res){Update = Res;}
+    public static VersionManager setUpdateButton(@StringRes int Res){vm.Update = vm.act.getString(Res);return vm;}
+    public static VersionManager setUpdateButton(String Res){vm.Update = Res;return vm;}
 
-    public static void setDismissButton(@StringRes int Res){Dismiss = act.getString(Res);}
-    public static void setDismissButton(String Res){apu.setButtonDismiss(Res);}
+    public static VersionManager setDismissButton(@StringRes int Res){vm.Dismiss = vm.act.getString(Res);return vm;}
+    public static VersionManager setDismissButton(String Res){vm.apu.setButtonDismiss(Res);return vm;}
 
-    public static void start(Activity ac) {
-        apu.setTitleOnUpdateAvailable(Title)
+    public static void start() {
+        vm.apu.setTitleOnUpdateAvailable(Title)
            .setContentOnUpdateAvailable(Content)
            .setButtonUpdate(Update)
            .setButtonDismiss(Dismiss)
