@@ -22,7 +22,7 @@ public class VersionManager {
                 .setButtonDoNotShowAgain("");
         vm.act = ac;
         vm.setTitle(R.string.TitleOnUpdateAvailable);
-        vm.setContent(R.string.ContentOnUpdateAvailable);
+        vm.setContent(act.getString(R.string.ContentOnUpdateAvailable, act.getString(R.string.app_name)));
         vm.setUpdateButton(R.string.UpdateGo);
         vm.setDismissButton(R.string.UpdateNextTime);
         return vm;
