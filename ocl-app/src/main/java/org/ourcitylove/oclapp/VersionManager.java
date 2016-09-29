@@ -24,7 +24,7 @@ public class VersionManager {
         vm.setContent(act.getString(R.string.ContentOnUpdateAvailable, act.getString(R.string.app_name)));
         vm.setUpdateButton(R.string.UpdateGo);
         vm.setDismissButton(R.string.UpdateNextTime);
-        vm.setNotShowButton(NotShow);
+        vm.setNotShowButton(R.string.DoNotShowAgain);
         return vm;
     }
 

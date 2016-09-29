@@ -27,4 +27,5 @@
     <string name="ContentOnUpdateAvailable">前往更新%s？</string>
     <string name="UpdateGo">前往</string>
     <string name="UpdateNextTime">下次再說</string>
+    <string name="DoNotShowAgain">不再提醒</string>
 </resources>
