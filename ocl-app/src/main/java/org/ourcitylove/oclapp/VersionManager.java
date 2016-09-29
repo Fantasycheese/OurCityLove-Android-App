@@ -13,18 +13,18 @@ public class VersionManager {
     private static VersionManager vm;
     private static AppUpdater apu;
     public static Activity act;
-    private static String Title, Content, Update, Dismiss;
+    private static String Title, Content, Update, Dismiss, NotShow = "";
 
     public static VersionManager init(Activity ac){
         vm = null == vm?new VersionManager():vm;
         vm.apu = new AppUpdater(ac)
-                .showAppUpdated(false)
-                .setButtonDoNotShowAgain("");
+                .showAppUpdated(false);
         vm.act = ac;
         vm.setTitle(R.string.TitleOnUpdateAvailable);
         vm.setContent(act.getString(R.string.ContentOnUpdateAvailable, act.getString(R.string.app_name)));
         vm.setUpdateButton(R.string.UpdateGo);
         vm.setDismissButton(R.string.UpdateNextTime);
+        vm.setNotShowButton(NotShow);
         return vm;
     }
 
@@ -38,13 +38,17 @@ public class VersionManager {
     public static VersionManager setUpdateButton(String Res){vm.Update = Res;return vm;}
 
     public static VersionManager setDismissButton(@StringRes int Res){vm.Dismiss = vm.act.getString(Res);return vm;}
-    public static VersionManager setDismissButton(String Res){vm.apu.setButtonDismiss(Res);return vm;}
+    public static VersionManager setDismissButton(String Res){vm.Dismiss = Res;return vm;}
+
+    public static VersionManager setNotShowButton(@StringRes int Res){vm.NotShow = vm.act.getString(Res);return vm;}
+    public static VersionManager setNotShowButton(String Res){vm.NotShow = Res;return vm;}
 
     public static void start() {
         vm.apu.setTitleOnUpdateAvailable(Title)
            .setContentOnUpdateAvailable(Content)
            .setButtonUpdate(Update)
            .setButtonDismiss(Dismiss)
+           .setButtonDoNotShowAgain(NotShow)
            .start();
 }
 }
