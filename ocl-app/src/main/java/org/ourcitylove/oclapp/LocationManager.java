@@ -110,6 +110,10 @@ public class LocationManager {
         }
     }
 
+    public static double getDistance(Location loc1, Location loc2) {
+        return getDistance(loc1.getLatitude(), loc1.getLongitude(), loc2.getLatitude(), loc2.getLongitude());
+    }
+
     public static double getDistance(double lat_a, double lng_a, double lat_b, double lng_b) {
 
         double latDiff = Math.toRadians(lat_b - lat_a);
