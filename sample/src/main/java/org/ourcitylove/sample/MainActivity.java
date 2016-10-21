@@ -2,11 +2,11 @@ package org.ourcitylove.sample;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.RelativeLayout;
 
 import org.ourcitylove.oclapp.BaseActivity;
 import org.ourcitylove.oclapp.Firebase;
@@ -22,7 +22,7 @@ public class MainActivity extends BaseActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.content_main)
-    ConstraintLayout contentMain;
+    RelativeLayout contentMain;
     @BindView(R.id.fab)
     FloatingActionButton fab;
 
