@@ -30,4 +30,13 @@ public class OtherApp {
         intent.setFlags(268435456);
         context.startActivity(intent);
     }
+
+    public static void callBySpeed(Context context, String tel) {
+        tel = tel.replaceAll("()-]", "").replaceAll("#", String.format("%s", PhoneNumberUtils.PAUSE));
+        Intent intent = new Intent();
+        intent.setAction("android.intent.action.CALL");
+        intent.setData(Uri.parse("tel:" + tel));
+        intent.setFlags(268435456);
+        context.startActivity(intent);
+    }
 }
