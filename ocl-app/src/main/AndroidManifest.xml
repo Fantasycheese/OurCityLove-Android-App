@@ -2,6 +2,10 @@
           xmlns:tools="http://schemas.android.com/tools"
           package="org.ourcitylove.oclapp">
 
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+
+    <uses-feature android:name="android.hardware.telephony" android:required="false" />
+
     <application
         android:allowBackup="true"
         android:supportsRtl="true"
