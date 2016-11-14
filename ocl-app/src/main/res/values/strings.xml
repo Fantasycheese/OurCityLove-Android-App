@@ -24,7 +24,8 @@
     <string name="unit_meter" translatable="false">公尺</string>
     
     <string name="TitleOnUpdateAvailable">線上已有更新</string>
-    <string name="ContentOnUpdateAvailable">前往更新%s？</string>
+    <string name="ContentOnUpdateAvailable">請前往更新%1$sV%2$s</string>
+    <string name="msg_force_update" translatable="false">請務必更新至最新版本</string>
     <string name="UpdateGo">前往</string>
     <string name="UpdateNextTime">下次再說</string>
     <string name="DoNotShowAgain">不再提醒</string>
