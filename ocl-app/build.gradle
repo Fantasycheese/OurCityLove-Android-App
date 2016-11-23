@@ -32,12 +32,12 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:25.0.0'
+    compile 'com.android.support:appcompat-v7:25.0.1'
     compile 'ch.acra:acra:4.9.0'   // crash report
-    compile 'com.google.firebase:firebase-core:9.4.0'   // analytics
+    compile 'com.google.firebase:firebase-core:9.8.0'   // analytics
     compile 'com.karumi:dexter:2.3.1' // runtime permission
     compile 'com.afollestad.material-dialogs:core:0.9.0.1' // material dialog
-    compile 'io.nlopez.smartlocation:library:3.2.7'
+    compile 'io.nlopez.smartlocation:library:3.2.9'
     compile 'com.github.pwittchen:reactivenetwork:0.5.1' // connectivity status
 
     compile 'com.github.javiersantos:AppUpdater:2.4'
