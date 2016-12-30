@@ -2,6 +2,7 @@ package org.ourcitylove.sample;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -11,6 +12,7 @@ import android.widget.RelativeLayout;
 import org.ourcitylove.oclapp.BaseActivity;
 import org.ourcitylove.oclapp.Firebase;
 import org.ourcitylove.oclapp.Network;
+import org.ourcitylove.oclapp.layout.IconPreference;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,7 +40,7 @@ public class MainActivity extends BaseActivity {
 //        fab.setOnClickListener(view ->
 //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                .setAction("Action", null).show());
-        fab.setOnClickListener(view->{
+        fab.setOnClickListener(view -> {
             startActivity(new Intent(this, MainActivity.class));
         });
 
@@ -47,6 +49,10 @@ public class MainActivity extends BaseActivity {
         Network.checkConnectivity(this, "Please connect to network!");
 
         setNeedLocation(true);
+
+        getFragmentManager().beginTransaction()
+                .replace(R.id.FrameLayout, new PreferenceFragment())
+                .commit();
     }
 
     @Override
@@ -75,4 +81,17 @@ public class MainActivity extends BaseActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    public static class PreferenceFragment extends android.preference.PreferenceFragment {
+
+        @Override
+        public void onCreate(@Nullable Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.preferences);
+
+            IconPreference iconpref = (IconPreference) findPreference("PREF_PARTNER");
+
+        }
+    }
 }
+

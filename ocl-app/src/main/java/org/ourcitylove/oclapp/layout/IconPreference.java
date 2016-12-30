@@ -6,11 +6,13 @@ package org.ourcitylove.oclapp.layout;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.LinearGradient;
 import android.graphics.drawable.Drawable;
 import android.preference.Preference;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import org.ourcitylove.oclapp.R;
 
@@ -20,8 +22,13 @@ import org.ourcitylove.oclapp.R;
  * @author sora (shinpei.okamura@insprout.com)
  */
 public class IconPreference extends Preference {
+    public final static int LEFT = 0;
+    public final static int TOP = 1;
+    public final static int RIGHT = 2;
+    public final static int BOTTOM = 3;
 
     private Drawable icon = null;
+    private Integer place = null;
 
     /**
      * iconプロパティからリソースを読み込む.
@@ -36,6 +43,7 @@ public class IconPreference extends Preference {
         TypedArray ta = context.obtainStyledAttributes(
                 attrs, R.styleable.IconPreference, defStyle, 0);
         icon = ta.getDrawable(R.styleable.IconPreference_icon);
+        place = ta.getInt(R.styleable.IconPreference_place, LEFT);
     }
 
     /**
@@ -56,6 +64,7 @@ public class IconPreference extends Preference {
         super.onBindView(view);
 
         ImageView imageView = (ImageView) view.findViewById(R.id.icon);
+        LinearLayout rootLayout = (LinearLayout)imageView.getParent();
         if (imageView != null) {
             if (icon != null) {
                 imageView.setImageDrawable(icon);
@@ -63,6 +72,26 @@ public class IconPreference extends Preference {
                 imageView.setVisibility(View.GONE);
             }
         }
+
+        switch (place){
+            case LEFT:
+                rootLayout.setOrientation(LinearLayout.HORIZONTAL);
+                break;
+            case TOP:
+                rootLayout.setOrientation(LinearLayout.VERTICAL);
+                break;
+            case RIGHT:
+                rootLayout.setOrientation(LinearLayout.HORIZONTAL);
+                rootLayout.removeView(imageView);
+                rootLayout.addView(imageView, rootLayout.getChildCount());
+                break;
+            case BOTTOM:
+                rootLayout.setOrientation(LinearLayout.VERTICAL);
+                rootLayout.removeView(imageView);
+                rootLayout.addView(imageView, rootLayout.getChildCount());
+                break;
+        }
+
     }
 
     /**

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <org.ourcitylove.oclapp.layout.IconPreference
+        android:key="PREF_PARTNER"
+        android:title="TEST"
+        android:summary="MSG"
+        app:place="RIGHT"
+        app:icon="@mipmap/ic_launcher"
+        />
+
+
+</android.preference.PreferenceScreen>

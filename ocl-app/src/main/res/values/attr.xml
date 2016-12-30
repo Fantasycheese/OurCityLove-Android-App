@@ -2,5 +2,12 @@
 <resources>
     <declare-styleable name="IconPreference">
         <attr name="icon" format="reference" />
+        <attr name="place" format="enum" >
+            <enum name="LEFT" value="0" />
+            <enum name="TOP" value="1" />
+            <enum name="RIGHT" value="2" />
+            <enum name="BOTTOM" value="3" />
+        </attr>
+
     </declare-styleable>
 </resources>
