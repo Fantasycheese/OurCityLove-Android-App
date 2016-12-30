@@ -1,10 +1,12 @@
 package org.ourcitylove.oclapp;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
 
 import com.karumi.dexter.Dexter;
+import com.karumi.dexter.listener.single.PermissionListener;
 
 import io.nlopez.smartlocation.SmartLocation;
 import io.nlopez.smartlocation.location.config.LocationAccuracy;
@@ -55,14 +57,22 @@ public class LocationManager {
 
     public Observable<Location> update(Context context, boolean oneFix) {
         return Observable.create(subscriber -> {
-            if (Dexter.isRequestOngoing()) return;
-            Dexter.checkPermission(
-                    RationalePermissionListener.Builder.with(context)
-                            .withRationaleMsg(permissionMsg)
-                            .withRunOnGranted(() -> startUpdateLocation(subscriber, context, oneFix))
-                            .build(),
-                    Manifest.permission.ACCESS_FINE_LOCATION
-            );
+//            if (Dexter.isRequestOngoing()) return;
+            Dexter.withActivity((Activity)context)
+                    .withPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+                    .withListener(
+                            RationalePermissionListener.Builder.with(context)
+                                    .withRationaleMsg(permissionMsg)
+                                    .withRunOnGranted(() -> startUpdateLocation(subscriber, context, oneFix))
+                                    .build())
+                    .check();
+//            Dexter.checkPermission(
+//                    RationalePermissionListener.Builder.with(context)
+//                            .withRationaleMsg(permissionMsg)
+//                            .withRunOnGranted(() -> startUpdateLocation(subscriber, context, oneFix))
+//                            .build(),
+//                    Manifest.permission.ACCESS_FINE_LOCATION
+//            );
         });
     }
 

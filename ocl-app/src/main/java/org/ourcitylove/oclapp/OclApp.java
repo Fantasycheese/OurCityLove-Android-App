@@ -21,7 +21,7 @@ public class OclApp extends Application {
     public void onCreate() {
         super.onCreate();
         ACRA.init(this);
-        Dexter.initialize(this);
+//        Dexter.initialize(this);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         pref = PreferenceManager.getDefaultSharedPreferences(this);
         loc = new LocationManager.Builder().setLog(true).build();
