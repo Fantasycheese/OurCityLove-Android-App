@@ -6,9 +6,10 @@ package org.ourcitylove.oclapp.layout;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.LinearGradient;
 import android.graphics.drawable.Drawable;
 import android.preference.Preference;
+import android.support.annotation.IdRes;
+import android.support.annotation.LayoutRes;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
@@ -22,13 +23,15 @@ import org.ourcitylove.oclapp.R;
  * @author sora (shinpei.okamura@insprout.com)
  */
 public class IconPreference extends Preference {
-    public final static int LEFT = 0;
-    public final static int TOP = 1;
-    public final static int RIGHT = 2;
-    public final static int BOTTOM = 3;
+    private final static int LEFT = 0;
+    private final static int TOP = 1;
+    private final static int RIGHT = 2;
+    private final static int BOTTOM = 3;
 
     private Drawable icon = null;
     private Integer place = null;
+
+    private View View;
 
     /**
      * iconプロパティからリソースを読み込む.
@@ -62,7 +65,7 @@ public class IconPreference extends Preference {
      */
     protected void onBindView(View view) {
         super.onBindView(view);
-
+        this.View = view;
         ImageView imageView = (ImageView) view.findViewById(R.id.icon);
         LinearLayout rootLayout = (LinearLayout)imageView.getParent();
         if (imageView != null) {
@@ -105,5 +108,9 @@ public class IconPreference extends Preference {
             this.icon = icon;
             notifyChanged();
         }
+    }
+
+    public View findViewById(@IdRes int ResId){
+        return View.findViewById(ResId);
     }
 }
