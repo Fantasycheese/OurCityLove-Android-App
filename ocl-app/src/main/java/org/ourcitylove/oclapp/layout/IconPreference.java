@@ -9,10 +9,9 @@ import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.preference.Preference;
 import android.support.annotation.IdRes;
-import android.support.annotation.LayoutRes;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -67,34 +66,46 @@ public class IconPreference extends Preference {
     protected void onBindView(View view) {
         super.onBindView(view);
         ImageView imageView = (ImageView) view.findViewById(R.id.icon);
-        LinearLayout rootLayout = (LinearLayout)imageView.getParent();
         if (imageView != null) {
             if (icon != null) {
                 imageView.setImageDrawable(icon);
             } else {
                 imageView.setVisibility(View.GONE);
             }
+            LinearLayout rootLayout = (LinearLayout)imageView.getParent();
+            switch (place) {
+                case LEFT:
+                    rootLayout.setOrientation(LinearLayout.HORIZONTAL);
+                    break;
+                case TOP:
+                    rootLayout.setOrientation(LinearLayout.VERTICAL);
+                    imageView.post(()-> {
+                        DisplayMetrics displayMetrics = getContext().getResources().getDisplayMetrics();
+                        int width = displayMetrics.widthPixels;
+                        float ratio = (float)width / (float)icon.getIntrinsicWidth();
+                        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams)imageView.getLayoutParams();
+                        params.height = (int)(icon.getIntrinsicHeight() * ratio);
+                    });
+                    break;
+                case RIGHT:
+                    rootLayout.setOrientation(LinearLayout.HORIZONTAL);
+                    rootLayout.removeView(imageView);
+                    rootLayout.addView(imageView, rootLayout.getChildCount()-2);
+                    break;
+                case BOTTOM:
+                    rootLayout.setOrientation(LinearLayout.VERTICAL);
+                    rootLayout.removeView(imageView);
+                    rootLayout.addView(imageView, rootLayout.getChildCount()-2);
+                    imageView.post(()-> {
+                        DisplayMetrics displayMetrics = getContext().getResources().getDisplayMetrics();
+                        int width = displayMetrics.widthPixels;
+                        float ratio = (float)width / (float)icon.getIntrinsicWidth();
+                        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams)imageView.getLayoutParams();
+                        params.height = (int)(icon.getIntrinsicHeight() * ratio);
+                    });
+                    break;
+            }
         }
-
-        switch (place){
-            case LEFT:
-                rootLayout.setOrientation(LinearLayout.HORIZONTAL);
-                break;
-            case TOP:
-                rootLayout.setOrientation(LinearLayout.VERTICAL);
-                break;
-            case RIGHT:
-                rootLayout.setOrientation(LinearLayout.HORIZONTAL);
-                rootLayout.removeView(imageView);
-                rootLayout.addView(imageView, rootLayout.getChildCount());
-                break;
-            case BOTTOM:
-                rootLayout.setOrientation(LinearLayout.VERTICAL);
-                rootLayout.removeView(imageView);
-                rootLayout.addView(imageView, rootLayout.getChildCount());
-                break;
-        }
-
     }
 
     /**
