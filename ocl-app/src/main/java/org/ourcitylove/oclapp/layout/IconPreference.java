@@ -58,12 +58,6 @@ public class IconPreference extends Preference {
         this(context, attrs, 0);
     }
 
-    @Override
-    protected View onCreateView(ViewGroup parent) {
-        this.View = super.onCreateView(parent);
-        return View;
-    }
-
     /**
      * アイコンのImageViewを設定する.
      *

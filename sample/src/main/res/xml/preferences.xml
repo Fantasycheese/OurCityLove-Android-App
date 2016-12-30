@@ -6,8 +6,8 @@
         android:key="PREF_PARTNER"
         android:title="TEST"
         android:summary="MSG"
-        app:place="RIGHT"
-        app:icon="@mipmap/ic_launcher"
+        app:place="BOTTOM"
+        app:icon="@drawable/ic_settings_bottom"
         />
 
 
