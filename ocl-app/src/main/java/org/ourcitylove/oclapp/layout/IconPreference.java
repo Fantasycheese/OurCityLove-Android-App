@@ -12,6 +12,7 @@ import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -57,6 +58,12 @@ public class IconPreference extends Preference {
         this(context, attrs, 0);
     }
 
+    @Override
+    protected View onCreateView(ViewGroup parent) {
+        this.View = super.onCreateView(parent);
+        return View;
+    }
+
     /**
      * アイコンのImageViewを設定する.
      *
@@ -65,7 +72,6 @@ public class IconPreference extends Preference {
      */
     protected void onBindView(View view) {
         super.onBindView(view);
-        this.View = view;
         ImageView imageView = (ImageView) view.findViewById(R.id.icon);
         LinearLayout rootLayout = (LinearLayout)imageView.getParent();
         if (imageView != null) {
