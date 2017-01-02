@@ -7,11 +7,16 @@ package org.ourcitylove.oclapp.layout;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.preference.Preference;
 import android.support.annotation.IdRes;
+import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -31,13 +36,12 @@ public class IconPreference extends Preference {
     private Drawable icon = null;
     private Integer place = null;
 
-    private View View;
-
     /**
      * iconプロパティからリソースを読み込む.
-     *
+     * <p>
      * {@inheritDoc}
-     * @see Preference#IconPreference(Context,AttributeSet,int)
+     *
+     * @see Preference#IconPreference(Context, AttributeSet, int)
      */
     public IconPreference(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -51,7 +55,8 @@ public class IconPreference extends Preference {
 
     /**
      * {@inheritDoc}
-     * @see Preference#IconPreference(Context,AttributeSet)
+     *
+     * @see Preference#IconPreference(Context, AttributeSet)
      */
     public IconPreference(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
@@ -59,10 +64,12 @@ public class IconPreference extends Preference {
 
     /**
      * アイコンのImageViewを設定する.
-     *
+     * <p>
      * {@inheritDoc}
+     *
      * @see Preference#onBindView(View)
      */
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     protected void onBindView(View view) {
         super.onBindView(view);
         ImageView imageView = (ImageView) view.findViewById(R.id.icon);
@@ -72,37 +79,35 @@ public class IconPreference extends Preference {
             } else {
                 imageView.setVisibility(View.GONE);
             }
-            LinearLayout rootLayout = (LinearLayout)imageView.getParent();
+            LinearLayout rootLayout = (LinearLayout) imageView.getParent();
+            DisplayMetrics displayMetrics = getContext().getResources().getDisplayMetrics();
+            int width = displayMetrics.widthPixels;
+            float ratio = (float) width / (float) icon.getIntrinsicWidth();
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams)imageView.getLayoutParams();
+            params.height = (int)(ratio * icon.getIntrinsicHeight());
             switch (place) {
                 case LEFT:
                     rootLayout.setOrientation(LinearLayout.HORIZONTAL);
+                    rootLayout.removeView(imageView);
+                    params.width = -1;
+                    rootLayout.addView(imageView, 0, params);
                     break;
                 case TOP:
                     rootLayout.setOrientation(LinearLayout.VERTICAL);
-                    imageView.post(()-> {
-                        DisplayMetrics displayMetrics = getContext().getResources().getDisplayMetrics();
-                        int width = displayMetrics.widthPixels;
-                        float ratio = (float)width / (float)icon.getIntrinsicWidth();
-                        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams)imageView.getLayoutParams();
-                        params.height = (int)(icon.getIntrinsicHeight() * ratio);
-                    });
+                    rootLayout.removeView(imageView);
+                    rootLayout.addView(imageView, 0, params);
                     break;
                 case RIGHT:
                     rootLayout.setOrientation(LinearLayout.HORIZONTAL);
                     rootLayout.removeView(imageView);
-                    rootLayout.addView(imageView, rootLayout.getChildCount()-2);
+                    params.width = -1;
+                    rootLayout.addView(imageView, rootLayout.getChildCount() - 2, params);
                     break;
                 case BOTTOM:
                     rootLayout.setOrientation(LinearLayout.VERTICAL);
                     rootLayout.removeView(imageView);
-                    rootLayout.addView(imageView, rootLayout.getChildCount()-2);
-                    imageView.post(()-> {
-                        DisplayMetrics displayMetrics = getContext().getResources().getDisplayMetrics();
-                        int width = displayMetrics.widthPixels;
-                        float ratio = (float)width / (float)icon.getIntrinsicWidth();
-                        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams)imageView.getLayoutParams();
-                        params.height = (int)(icon.getIntrinsicHeight() * ratio);
-                    });
+                    params.gravity = Gravity.CENTER_HORIZONTAL;
+                    rootLayout.addView(imageView, rootLayout.getChildCount() - 2, params);
                     break;
             }
         }
@@ -119,9 +124,5 @@ public class IconPreference extends Preference {
             this.icon = icon;
             notifyChanged();
         }
-    }
-
-    public View findViewById(@IdRes int ResId){
-        return View.findViewById(ResId);
     }
 }

@@ -13,17 +13,18 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="6dp"
         android:layout_marginRight="6dp"
-        android:scaleType="fitEnd"
+        android:layout_marginStart="6dp"
+        android:layout_marginEnd="6dp"
+        android:scaleType="fitCenter"
         android:layout_gravity="center"/>
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="6dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="6dp"
-        android:layout_marginBottom="6dp"
-        android:layout_weight="1">
+        android:layout_marginBottom="6dp">
 
         <TextView android:id="@+android:id/title"
             android:layout_width="wrap_content"
@@ -39,7 +40,6 @@
             android:layout_below="@android:id/title"
             android:layout_alignLeft="@android:id/title"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:maxLines="2"
             android:textColor="?android:attr/textColorSecondary" />
 
     </RelativeLayout>
