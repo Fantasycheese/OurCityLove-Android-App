@@ -19,7 +19,7 @@ public class BaseActivity extends AppCompatActivity {
         super.onStart();
 
         if (needLocation) {
-            OclApp.loc.lastAndUpdate(this)
+            OclApp.loc.lastAndUpdate(this, false)
                     .filter(location -> location != null)
                     .subscribe(this::onLocation);
         }

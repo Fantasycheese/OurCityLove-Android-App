@@ -34,11 +34,11 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:25.1.0'
     compile 'ch.acra:acra:4.9.0'   // crash report
-    compile 'com.google.firebase:firebase-core:9.8.0'   // analytics
+    compile 'com.google.firebase:firebase-core:10.0.1'   // analytics
     compile 'com.karumi:dexter:3.0.0' //runtime permission
     compile 'com.afollestad.material-dialogs:core:0.9.0.1' // material dialog
-    compile 'io.nlopez.smartlocation:library:3.2.9'
-    compile 'com.github.pwittchen:reactivenetwork:0.5.1' // connectivity status
+    compile 'io.nlopez.smartlocation:library:3.2.11'
+    compile 'com.github.pwittchen:reactivenetwork:0.7.0' // connectivity status
 
     compile 'com.github.javiersantos:AppUpdater:2.4'
     compile 'com.squareup.okhttp3:okhttp:3.4.1'
