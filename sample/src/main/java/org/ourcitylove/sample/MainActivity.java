@@ -1,94 +1,64 @@
 package org.ourcitylove.sample;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import org.ourcitylove.oclapp.BaseActivity;
+import com.karumi.dexter.Dexter;
+
 import org.ourcitylove.oclapp.Firebase;
+import org.ourcitylove.oclapp.LocationActivity;
 import org.ourcitylove.oclapp.Network;
-import org.ourcitylove.oclapp.layout.IconPreference;
+import org.ourcitylove.oclapp.RationalePermissionsListener;
 
-public class MainActivity extends BaseActivity {
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
-    private static final String TAG = MainActivity.class.getSimpleName();
+public class MainActivity extends AppCompatActivity {
 
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
-
-    RelativeLayout contentMain;
-
+    @BindView(R.id.fab)
     FloatingActionButton fab;
+    @BindView(R.id.text_view)
+    TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        contentMain = (RelativeLayout) findViewById(R.id.content_main);
-        fab = (FloatingActionButton) findViewById(R.id.fab);
+        ButterKnife.bind(this);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(view ->
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                .setAction("Action", null).show());
-        fab.setOnClickListener(view -> {
-            startActivity(new Intent(this, MainActivity.class));
-        });
+        setSupportActionBar(toolbar);
+        fab.setOnClickListener(view -> startActivity(new Intent(this, MainActivity.class)));
 
         Firebase.trackScreen("MAIN");
 
         Network.checkConnectivity(this, "Please connect to network!");
 
-        setNeedLocation(true);
+        // test permission
+        Dexter.withActivity(this)
+                .withPermissions(
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.CALL_PHONE
+                )
+                .withListener(
+                        RationalePermissionsListener.Builder.with(this)
+                                .withRunOnGranted(()->{
+                                    Toast.makeText(this, "Permission Granted!", Toast.LENGTH_SHORT).show();
+                                })
+                                .build())
+                .check();
 
-        getFragmentManager().beginTransaction()
-                .replace(R.id.FrameLayout, new PreferenceFragment())
-                .commit();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    public static class PreferenceFragment extends android.preference.PreferenceFragment {
-
-        @Override
-        public void onCreate(@Nullable Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.preferences);
-
-            IconPreference iconpref = (IconPreference) findPreference("PREF_PARTNER");
-
-        }
+        App.loc.lastAndUpdate(this)
+                .subscribe(loc -> textView.setText(loc.toString()));
+//        setLocationListener(loc -> textView.setText(loc.toString()));
     }
 }
 

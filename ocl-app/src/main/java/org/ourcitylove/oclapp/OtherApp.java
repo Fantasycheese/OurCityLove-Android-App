@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.telephony.PhoneNumberUtils;
 
+@SuppressWarnings("unused")
 public class OtherApp {
     public static void googleMapNavigate(Context context, String direct){
         Uri uri=Uri.parse("google.navigation:q=" + direct);

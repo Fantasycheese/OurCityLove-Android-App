@@ -1,19 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools"
           package="org.ourcitylove.oclapp">
 
-    <uses-permission android:name="android.permission.CALL_PHONE" />
-
-    <uses-feature android:name="android.hardware.telephony" android:required="false" />
-
+    <!--permissions for firebase analytics-->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-
-    <application
-        android:allowBackup="true"
-        android:supportsRtl="true"
-        >
-        <meta-data tools:replace="android:value" android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
-
-    </application>
 
 </manifest>

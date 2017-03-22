@@ -6,7 +6,6 @@ import android.content.Context;
 import android.location.Location;
 
 import com.karumi.dexter.Dexter;
-import com.karumi.dexter.listener.single.PermissionListener;
 
 import io.nlopez.smartlocation.SmartLocation;
 import io.nlopez.smartlocation.location.config.LocationAccuracy;
@@ -15,19 +14,19 @@ import io.nlopez.smartlocation.location.providers.LocationGooglePlayServicesProv
 import rx.Observable;
 import rx.Subscriber;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class LocationManager {
     private static final double EARTH_RADIUS = 3958.75;
     private static final int METER_CONVERSION = 1609;
 
     private SmartLocation.LocationControl lc;
 
-    public LocationParams locParams;
-    public String permissionMsg;
-    public boolean log;
+    private LocationParams locParams;
+    private String permissionMsg;
+    private boolean log;
     public LocationGooglePlayServicesProvider lp;
 
-    public LocationManager(LocationParams locParams, String permissionMsg, boolean log) {
+    private LocationManager(LocationParams locParams, String permissionMsg, boolean log) {
         this.locParams = locParams;
         this.permissionMsg = permissionMsg;
         this.log = log;
@@ -38,14 +37,25 @@ public class LocationManager {
     public Observable<Location> lastAndUpdate(Context context) {
         return lastAndUpdate(context, false);
     }
-
     public Observable<Location> lastAndUpdate(Context context, boolean oneFix) {
-        return Observable.just(OclApp.loc.last(context))
+        return OclApp.loc.last(context)
                 .concatWith(OclApp.loc.update(context, oneFix))
                 .filter(location -> location != null);
     }
 
-    public Location last(Context context) {
+    public Observable<Location> last(Context context) {
+        return Observable.create(subscriber ->
+            Dexter.withActivity((Activity)context)
+                .withPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+                .withListener(
+                        RationalePermissionListener.Builder.with(context)
+                                .withRationaleMsg(permissionMsg)
+                                .withRunOnGranted(() -> getLastLocation(context))
+                                .build())
+                .check());
+    }
+
+    public Location getLastLocation(Context context) {
         return new SmartLocation.Builder(context)
                 .logging(log).build().location(lp)
                 .getLastLocation();
@@ -56,24 +66,15 @@ public class LocationManager {
     }
 
     public Observable<Location> update(Context context, boolean oneFix) {
-        return Observable.create(subscriber -> {
-//            if (Dexter.isRequestOngoing()) return;
+        return Observable.create(subscriber ->
             Dexter.withActivity((Activity)context)
-                    .withPermission(Manifest.permission.ACCESS_FINE_LOCATION)
-                    .withListener(
-                            RationalePermissionListener.Builder.with(context)
-                                    .withRationaleMsg(permissionMsg)
-                                    .withRunOnGranted(() -> startUpdateLocation(subscriber, context, oneFix))
-                                    .build())
-                    .check();
-//            Dexter.checkPermission(
-//                    RationalePermissionListener.Builder.with(context)
-//                            .withRationaleMsg(permissionMsg)
-//                            .withRunOnGranted(() -> startUpdateLocation(subscriber, context, oneFix))
-//                            .build(),
-//                    Manifest.permission.ACCESS_FINE_LOCATION
-//            );
-        });
+                .withPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+                .withListener(
+                        RationalePermissionListener.Builder.with(context)
+                                .withRationaleMsg(permissionMsg)
+                                .withRunOnGranted(() -> startUpdateLocation(subscriber, context, oneFix))
+                                .build())
+                .check());
     }
 
     private void startUpdateLocation(Subscriber<? super Location> subscriber, Context context, boolean oneFix) {
@@ -97,7 +98,7 @@ public class LocationManager {
             this.locParams = new LocationParams.Builder()
                     .setAccuracy(LocationAccuracy.LOW)
                     .setDistance(0f)
-                    .setInterval(5000).build();
+                    .setInterval(10000).build();
         }
 
         public Builder setLocParams(LocationParams locParams) {
