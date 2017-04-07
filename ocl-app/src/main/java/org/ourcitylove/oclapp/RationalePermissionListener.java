@@ -4,6 +4,8 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.content.pm.PermissionGroupInfo;
+import android.content.pm.PermissionInfo;
 import android.support.v4.util.SparseArrayCompat;
 
 import com.karumi.dexter.PermissionToken;
@@ -55,8 +57,9 @@ public class RationalePermissionListener implements PermissionListener {
         PackageManager pm = context.getPackageManager();
         String permissionDisplayName = null;
         try {
-            permissionDisplayName = pm
-                    .getPermissionGroupInfo(permission.getName(), 0).loadLabel(pm).toString();
+            PermissionInfo info = pm.getPermissionInfo(permission.getName(), 0);
+            PermissionGroupInfo groupInfo = pm.getPermissionGroupInfo(info.group, 0);
+            permissionDisplayName = groupInfo.loadLabel(pm).toString();
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
