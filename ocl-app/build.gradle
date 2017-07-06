@@ -1,11 +1,10 @@
 apply plugin: 'com.android.library'
-apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'com.github.dcendents.android-maven' // for jitpack
 group='com.github.Fantasycheese' // for jitpack
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    buildToolsVersion "25.0.3"
 
     defaultConfig {
         minSdkVersion 15
@@ -33,9 +32,9 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.google.firebase:firebase-core:10.2.0'   // analytics
-    compile 'com.karumi:dexter:4.0.0' //runtime permission
+    compile 'com.karumi:dexter:4.1.0' //runtime permission
     compile 'io.nlopez.smartlocation:library:3.3.1'
     compile 'com.github.pwittchen:reactivenetwork:0.7.0' // connectivity status
 
-    compile 'com.github.javiersantos:AppUpdater:2.4'
+    compile 'com.github.javiersantos:AppUpdater:2.6.1'
 }
