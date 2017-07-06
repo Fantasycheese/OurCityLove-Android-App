@@ -35,6 +35,4 @@ dependencies {
     compile 'com.karumi:dexter:4.1.0' //runtime permission
     compile 'io.nlopez.smartlocation:library:3.3.1'
     compile 'com.github.pwittchen:reactivenetwork:0.7.0' // connectivity status
-
-    compile 'com.github.javiersantos:AppUpdater:2.6.1'
 }
